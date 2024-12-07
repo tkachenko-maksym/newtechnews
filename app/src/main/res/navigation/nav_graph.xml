@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/nav_news">
+
+    <fragment
+        android:id="@+id/nav_news"
+        android:name="com.example.newtechnews.ui.news.NewsFragment"
+        android:label="News"
+        tools:layout="@layout/fragment_news">
+        <action
+            android:id="@+id/action_newsFragment_to_newsDetailsFragment"
+            app:destination="@id/nav_news_details" />
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_news_details"
+        android:name="com.example.newtechnews.ui.details.NewsDetailsFragment"
+        android:label="News Details"
+        tools:layout="@layout/fragment_news_details">
+<!--            <argument-->
+<!--                android:name="article"-->
+<!--                app:argType="parsable" />-->
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_bookmarks"
+        android:name="com.example.newtechnews.ui.bookmarks.BookmarksFragment"
+        android:label="Bookmarks"
+        tools:layout="@layout/fragment_bookmarks">
+        <!--        <action-->
+        <!--            android:id="@+id/action_newsFragment_to_newsDetailsFragment"-->
+        <!--            app:destination="@id/nav_news_details" />-->
+
+    </fragment>
+</navigation>
