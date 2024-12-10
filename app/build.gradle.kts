@@ -11,7 +11,12 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+    
     defaultConfig {
         applicationId = "com.example.newtechnews"
         minSdk = 28
@@ -65,8 +70,23 @@ dependencies {
     implementation(libs.logging.interceptor)
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
-    //glide async image
-    implementation(libs.glide)
+    //coil async image
+    implementation(libs.coil3.coil)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
+
+    //This dependency integrates Jetpack Compose with the Activity class, enabling the use of Compose in Android activities.
+    implementation(libs.androidx.activity.compose)
+    //Compose Bill of Materials (BOM), which helps manage versions of Compose libraries. In this case, it's using version 2023.03.00 for Compose dependencies.
+    implementation(libs.androidx.compose.bom)
+    //This dependency includes the fundamental UI elements and features provided by Jetpack Compose.
+    implementation(libs.androidx.ui)
+    //This includes tooling and preview functionalities for Compose, assisting with development and debugging UI components.
+    implementation(libs.androidx.ui.tooling.preview)
+    //This dependency includes the Material Design 3 components and styles adapted for Jetpack Compose, allowing the implementation of Material Design principles in your app's UI
+    implementation(libs.androidx.material3)
+
 
     kapt(libs.androidx.room.compiler)
 

@@ -31,7 +31,7 @@ class NewsViewModel : ViewModel() {
     fun fetchNextPage(
         query: String? = null,
     ) {
-        page+=1
+        page += 1
         fetchData(query)
     }
 
@@ -41,16 +41,19 @@ class NewsViewModel : ViewModel() {
             _isLoading.value = true
             try {
                 repository.getTopHeadlines(query, page).onSuccess { response ->
-                        val filteredArticles = response.articles.filter {
-                            it.articleSource?.name != "[Removed]"
-                        }
-                        val oldArticles = (_newsState.value as? NewsState.Success?)?.articles?.toMutableList()?: mutableListOf()
-                        oldArticles.addAll(filteredArticles)
-                        _newsState.value = NewsState.Success(oldArticles)
-                    }.onFailure { error ->
-                        Log.e("errorOnFailure", error.toString())
-                        _newsState.value = NewsState.Error(error.message ?: "Unknown error")
+                    val filteredArticles = response.articles.filter {
+                        !it.articleSource?.name.isNullOrEmpty() || (it.articleSource?.name != "[Removed]" && it.title != "[Removed]")
                     }
+                    filteredArticles.forEach { Log.d("images", it.urlToImage.toString()) }
+                    val oldArticles =
+                        (_newsState.value as? NewsState.Success?)?.articles?.toMutableList()
+                            ?: mutableListOf()
+                    oldArticles.addAll(filteredArticles)
+                    _newsState.value = NewsState.Success(oldArticles)
+                }.onFailure { error ->
+                    Log.e("errorOnFailure", error.toString())
+                    _newsState.value = NewsState.Error(error.message ?: "Unknown error")
+                }
             } catch (e: Exception) {
                 Log.e("error", e.toString())
                 _newsState.value = NewsState.Error(e.message ?: "Unknown error")

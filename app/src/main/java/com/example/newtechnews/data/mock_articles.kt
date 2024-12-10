@@ -55,16 +55,7 @@ val mock_articles = listOf(
         publishedAt = "2024-12-04T19:26:00Z",
         content = "Following the wide Utilities rollout..."
     ),
-    Article(
-        articleSource = ArticleSource(id = null, name = "[Removed]"),
-        author = null,
-        title = "[Removed]",
-        description = "[Removed]",
-        url = "https://removed.com",
-        urlToImage = null,
-        publishedAt = "2024-12-04T16:00:55Z",
-        content = "[Removed]"
-    ),
+
     Article(
         articleSource = ArticleSource(id = null, name = "9to5google.com"),
         author = "Ben Schoon",

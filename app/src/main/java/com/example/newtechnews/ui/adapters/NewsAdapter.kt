@@ -1,16 +1,16 @@
 package com.example.newtechnews.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil3.load
+import coil3.request.crossfade
+import coil3.request.error
+import coil3.request.placeholder
 import com.example.newtechnews.R
 import com.example.newtechnews.data.model.Article
 import com.example.newtechnews.databinding.MainNewsItemBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.newtechnews.utils.formatToDisplayDate
 import java.util.Objects
 
 class NewsAdapter(
@@ -23,18 +23,15 @@ class NewsAdapter(
     inner class NewsViewHolder(private val binding: MainNewsItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(article: Article) = with(binding) {
-            Log.d("adapter", article.articleSource.toString())
             titleText.text = article.title
             descriptionText.text = article.description
-            sourceText.text = article.articleSource?.name ?: ""
             dateText.text = article.publishedAt.formatToDisplayDate()
 
-            Glide.with(itemView)
-                .load(article.urlToImage)
-                .placeholder(R.drawable.ic_launcher_background)
-//                .error(R.drawable.error_image)
-                .into(newsImage)
-
+            newsImage?.load(article.urlToImage) {
+                crossfade(true)
+                placeholder(R.drawable.ic_launcher_background)
+                error(R.drawable.ic_error_image)
+            }
             root.setOnClickListener { onItemClick(article) }
             bookmarkButton.setOnClickListener { onBookmarkClick(article) }
         }
@@ -60,16 +57,5 @@ class NewsAdapter(
     fun setData(articles: List<Article>) {
         news.clear()
         news.addAll(articles)
-    }
-}
-
-fun String.formatToDisplayDate(): String {
-    return try {
-        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-        val formatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        val date = parser.parse(this)
-        formatter.format(date!!)
-    } catch (e: Exception) {
-        this
     }
 }

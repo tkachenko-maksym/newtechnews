@@ -45,6 +45,7 @@ class NewsFragment : Fragment() {
 //        setupSearchBar()
         setupSwipeRefresh()
         setupObservers()
+
         // Initial news fetch
         viewModel.fetchNews()
     }
@@ -130,7 +131,6 @@ class NewsFragment : Fragment() {
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             isDataFetching.set(isLoading)
-            binding.progressBar.isVisible = isLoading
             binding.swipeRefreshLayout.isRefreshing = isLoading
         }
     }
