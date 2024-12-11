@@ -1,4 +1,4 @@
-package com.example.newtechnews.ui.bookmarks
+package com.example.newtechnews.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,14 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 //import com.example.newtechnews.data.mock_articles
 import com.example.newtechnews.databinding.FragmentBookmarksBinding
-import com.example.newtechnews.ui.components.ArticleListCard
 
 class BookmarksFragment : Fragment() {
 
@@ -25,7 +23,6 @@ class BookmarksFragment : Fragment() {
 
     private var _binding: FragmentBookmarksBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: BookmarksViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +34,9 @@ class BookmarksFragment : Fragment() {
         }
         return binding.root
     }
+
     @Composable
-    private fun BookmarksContent() {
+    fun BookmarksContent() {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(6.dp),
@@ -53,6 +51,7 @@ class BookmarksFragment : Fragment() {
             // }
         }
     }
+
     private fun onArticleClick(article: Int) {
 
     }

@@ -1,15 +1,13 @@
-package com.example.newtechnews.ui.news
+package com.example.newtechnews.ui.viewmodel
 
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newtechnews.data.model.Article
 import com.example.newtechnews.data.repository.NewsRepository
-import com.example.newtechnews.utils.NetworkUtils
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -24,11 +22,8 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     private var currentJob: Job? = null
     private var page: Int = 1
-//    private var isInitialFetch = true
 
     fun fetchNews(query: String? = null) {
-//        if (!isInitialFetch) return
-//        isInitialFetch = false
         fetchData(query)
     }
 
@@ -87,10 +82,6 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
                 NewsState.Success(articles)
             }
         }
-    }
-
-    suspend fun deleteAllArticles() {
-        repository.deleteAllArticles()
     }
 
     fun reset() {

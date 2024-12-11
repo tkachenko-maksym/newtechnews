@@ -1,4 +1,4 @@
-package com.example.newtechnews.ui.news
+package com.example.newtechnews.ui.fragments
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -7,17 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.newtechnews.R
 //import com.example.newtechnews.data.mock_articles
 import com.example.newtechnews.databinding.FragmentNewsBinding
 import com.example.newtechnews.ui.adapters.NewsAdapter
-import com.example.newtechnews.utils.NetworkUtils
+import com.example.newtechnews.ui.viewmodel.NewsState
+import com.example.newtechnews.ui.viewmodel.NewsViewModel
 import com.google.android.material.snackbar.Snackbar
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -57,7 +56,7 @@ class NewsFragment : Fragment() {
                 onItemClick = { article ->
 
                     findNavController().navigate(
-                        NewsFragmentDirections.actionNewsFragmentToNewsDetailsFragment(article.url)
+                        NewsFragmentDirections.actionNewsFragmentToNewsDetailsFragment(article)
                     )
                 },
                 onBookmarkClick = { article ->

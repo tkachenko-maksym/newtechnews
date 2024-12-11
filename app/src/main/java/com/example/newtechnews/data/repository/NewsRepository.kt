@@ -37,7 +37,7 @@ class NewsRepository(
     suspend fun getAllArticles(): List<Article> {
         return newsDao.getAllArticles()
     }
-    suspend fun getArticleByUrl(url: String): Article? {
+    suspend fun getArticleByUrl(url: String): Article {
         return newsDao.getArticleByUrl(url)
     }
     suspend fun deleteAllArticles() {

@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/nav_news"
-        android:name="com.example.newtechnews.ui.news.NewsFragment"
+        android:name="com.example.newtechnews.ui.fragments.NewsFragment"
         android:label="News"
         tools:layout="@layout/fragment_news">
         <action
@@ -20,22 +20,20 @@
 
     <fragment
         android:id="@+id/nav_news_details"
-        android:name="com.example.newtechnews.ui.details.NewsDetailsFragment"
+        android:name="com.example.newtechnews.ui.fragments.NewsDetailsFragment"
         android:label="News Details"
         tools:layout="@layout/fragment_news_details">
         <argument
-            android:name="articleUrl"
-            app:argType="string" />
+            android:name="article"
+            app:argType="com.example.newtechnews.data.model.Article" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_bookmarks"
-        android:name="com.example.newtechnews.ui.bookmarks.BookmarksFragment"
+        android:name="com.example.newtechnews.ui.fragments.BookmarksFragment"
         android:label="Bookmarks"
         tools:layout="@layout/fragment_bookmarks">
-        <!--        <action-->
-        <!--            android:id="@+id/action_newsFragment_to_newsDetailsFragment"-->
-        <!--            app:destination="@id/nav_news_details" />-->
+
 
     </fragment>
 </navigation>

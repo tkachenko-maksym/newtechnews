@@ -3,7 +3,16 @@ package com.example.newtechnews.data
 import com.example.newtechnews.data.model.Article
 import com.example.newtechnews.data.model.ArticleSource
 
-
+val previewArticle = Article(
+    url = "https://www.techradar.com/gaming/gaming-industry/naughty-dog-welcomes-god-of-war-ragnaroks-former-art-director-raf-grassetti",
+    articleSource = ArticleSource(id = "techradar", name = "TechRadar"),
+    author = "Demi Williams",
+    title = "Naughty Dog welcomes God of War Ragnarok's former art director Raf Grassetti",
+    description = "Grassetti worked at Sony Santa Monica for 10 years",
+    urlToImage = "https://cdn.mos.cms.futurecdn.net/h878r5ze5QG9x72s424QYA-1200-80.jpg",
+    publishedAt = "2024-12-10T13:31:28Z",
+    content = "<ul><li>God of War Ragnarok's former art director Raf Grassetti has joined Naughty Dog</li><li>Grassetti was at Sony Santa Monica for 10 years before leaving to work at Netflix Games' Team Blue, which… [+1975 chars]"
+)
 //val mock_articles = listOf(
 //    Article(
 //        articleSource = ArticleSource(id = null, name = "9to5google.com"),
