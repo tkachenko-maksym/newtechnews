@@ -12,11 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-//import com.example.newtechnews.data.mock_articles
 import com.example.newtechnews.databinding.FragmentNewsBinding
 import com.example.newtechnews.ui.adapters.NewsAdapter
-import com.example.newtechnews.ui.viewmodel.NewsState
 import com.example.newtechnews.ui.viewmodel.NewsViewModel
+import com.example.newtechnews.utils.NetworkUtils
 import com.google.android.material.snackbar.Snackbar
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -42,12 +41,14 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-//        setupSearchBar()
         setupSwipeRefresh()
         setupObservers()
-        viewModel.cleanDatabase()
-        // Initial news fetch
+        if (NetworkUtils.isNetworkAvailable(requireContext())) {
+            viewModel.cleanDatabase()
+        }
+        viewModel.loadBookmarkedArticles()
         viewModel.fetchNews()
+        Log.d("onViewCreated", "onViewCreated")
     }
 
     private fun setupRecyclerView() {
@@ -60,8 +61,10 @@ class NewsFragment : Fragment() {
                     )
                 },
                 onBookmarkClick = { article ->
-                    // TODO: Implement bookmark functionality
-                }
+                    viewModel.toggleBookmark(article)
+
+                },
+                bookmarkedArticles = viewModel.bookmarkedArticles
             )
             newsAdapter.setHasStableIds(true)
             setHasFixedSize(true)
@@ -76,10 +79,6 @@ class NewsFragment : Fragment() {
                     val visibleItemCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-                    Log.d("visibleItemCount", visibleItemCount.toString())
-                    Log.d("totalItemCount", totalItemCount.toString())
-                    Log.d("firstVisibleItemPosition", firstVisibleItemPosition.toString())
-                    Log.d("isDataFetching", isDataFetching.get().toString())
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0
                     ) {
@@ -92,53 +91,51 @@ class NewsFragment : Fragment() {
         }
     }
 
-//    private fun setupSearchBar() {
-//        binding.searchBar.onQueryTextSubmit(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                viewModel.fetchNews(query = query)
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean = false
-//        })
-//    }
 
     private fun setupSwipeRefresh() {
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchNews()
+            if (NetworkUtils.isNetworkAvailable(requireContext())) {
+                viewModel.cleanDatabase()
+                viewModel.fetchNews()
+            }
         }
 
     }
 
     private fun setupObservers() {
-        viewModel.newsState.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is NewsState.Success -> {
-                    binding.newsRecyclerView.isVisible = true
-                    newsAdapter.setData(state.articles)
-                    newsAdapter.notifyDataSetChanged()
-                }
-
-                is NewsState.Error -> {
-                    binding.newsRecyclerView.isVisible = false
-                    Snackbar.make(
-                        binding.root,
-                        state.message,
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                }
+        viewModel.articles.observe(viewLifecycleOwner) { articles ->
+            if (articles.isNullOrEmpty()) {
+                binding.newsRecyclerView.isVisible = false
+            } else {
+                binding.newsRecyclerView.isVisible = true
+                newsAdapter.setData(articles)
+                newsAdapter.notifyDataSetChanged()
             }
         }
-
+        viewModel.bookmarkedArticles.observe(viewLifecycleOwner) { bookmarkedArticles ->
+            newsAdapter.notifyDataSetChanged()
+        }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             isDataFetching.set(isLoading)
             binding.swipeRefreshLayout.isRefreshing = isLoading
         }
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            if (errorMessage != null) {
+                binding.newsRecyclerView.isVisible = false
+                Snackbar.make(
+                    binding.root,
+                    errorMessage,
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.reset()
+
         _binding = null
     }
 }

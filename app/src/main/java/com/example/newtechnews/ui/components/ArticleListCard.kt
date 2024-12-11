@@ -21,10 +21,10 @@ import com.example.newtechnews.utils.formatToDisplayDate
 
 @Composable
 fun ArticleListCard(
-    article: Article, onClick: () -> Unit, modifier: Modifier = Modifier
+    article: Article, onClick: (article: Article) -> Unit, modifier: Modifier = Modifier
 ) {
     Card(
-        onClick = onClick, modifier = modifier.fillMaxWidth()
+        onClick = { onClick(article) }, modifier = modifier.fillMaxWidth()
     ) {
         Column {
             AsyncImage(

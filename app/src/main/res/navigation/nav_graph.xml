@@ -17,6 +17,16 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/nav_bookmarks"
+        android:name="com.example.newtechnews.ui.fragments.BookmarksFragment"
+        android:label="Bookmarks"
+        tools:layout="@layout/fragment_bookmarks">
+        <action
+            android:id="@+id/action_bookmarksFragment_to_newsDetailsFragment"
+            app:destination="@id/nav_news_details" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_news_details"
@@ -26,14 +36,5 @@
         <argument
             android:name="article"
             app:argType="com.example.newtechnews.data.model.Article" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_bookmarks"
-        android:name="com.example.newtechnews.ui.fragments.BookmarksFragment"
-        android:label="Bookmarks"
-        tools:layout="@layout/fragment_bookmarks">
-
-
     </fragment>
 </navigation>

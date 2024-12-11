@@ -65,6 +65,7 @@ dependencies {
     //room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.runtime.livedata)
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     // Retrofit
     implementation(libs.retrofit)

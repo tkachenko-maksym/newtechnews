@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-//
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_news, R.id.nav_bookmarks

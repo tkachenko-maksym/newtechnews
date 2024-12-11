@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +32,7 @@ import com.example.newtechnews.utils.formatToDisplayDate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.newtechnews.R
 
 @Composable
 fun ArticleDetailsCard(
@@ -101,15 +105,37 @@ fun ArticleDetailsCard(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
-            Button(
-                onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
-                    context.startActivity(intent)
-                },
-                modifier = Modifier.fillMaxWidth()
+            Spacer(modifier = Modifier.height(6.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Continue reading")
+                Button(
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
+                        context.startActivity(intent)
+                    },
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("Continue reading")
+                }
+
+                Button(
+                    onClick = onBookmarkClick,
+                    modifier = Modifier.height(40.dp)
+                ) {
+                    Icon(
+                        if (isBookmarked) {
+                            ImageVector.vectorResource(R.drawable.ic_bookmark_remove)
+                        } else {
+                            ImageVector.vectorResource(R.drawable.ic_bookmark_add)
+                        },
+                        contentDescription = if (isBookmarked) "Remove from bookmarks" else "Add to bookmarks"
+                    )
+                }
             }
+
         }
     }
 }
