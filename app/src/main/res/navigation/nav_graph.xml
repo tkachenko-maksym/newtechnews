@@ -23,9 +23,9 @@
         android:name="com.example.newtechnews.ui.details.NewsDetailsFragment"
         android:label="News Details"
         tools:layout="@layout/fragment_news_details">
-<!--            <argument-->
-<!--                android:name="article"-->
-<!--                app:argType="parsable" />-->
+        <argument
+            android:name="articleUrl"
+            app:argType="string" />
     </fragment>
 
     <fragment

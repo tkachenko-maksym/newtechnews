@@ -1,5 +1,6 @@
 package com.example.newtechnews.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -23,10 +24,11 @@ class NewsAdapter(
     inner class NewsViewHolder(private val binding: MainNewsItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(article: Article) = with(binding) {
+            //TODO add articleSource?.name
             titleText.text = article.title
             descriptionText.text = article.description
             dateText.text = article.publishedAt.formatToDisplayDate()
-
+            sourceNameText.text = article.articleSource?.name.toString()
             newsImage?.load(article.urlToImage) {
                 crossfade(true)
                 placeholder(R.drawable.ic_launcher_background)

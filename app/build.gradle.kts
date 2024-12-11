@@ -25,7 +25,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "API_KEY", "\"7ca8837252284b5cbd1d4c53d7774a9f\"")
+        buildConfigField("String", "API_KEY", "\"c39734ecec954a6cb98eefb85dc97e42\"")
     }
 
     buildTypes {
@@ -64,6 +64,7 @@ dependencies {
     //room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

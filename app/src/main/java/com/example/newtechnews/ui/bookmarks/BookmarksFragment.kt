@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.newtechnews.data.mock_articles
+//import com.example.newtechnews.data.mock_articles
 import com.example.newtechnews.databinding.FragmentBookmarksBinding
 import com.example.newtechnews.ui.components.ArticleListCard
 
@@ -32,30 +32,27 @@ class BookmarksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBookmarksBinding.inflate(inflater, container, false)
-        val composeView = binding.composeView
-        val myComposeContent: @Composable () -> Unit = {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(6.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(mock_articles) { article ->
-                    ArticleListCard(
-                        article = article,
-                        onClick = { }
-                    )
-                }
-
-            }
-        }
-
-        composeView.setContent {
-            myComposeContent()
+        binding.composeView.setContent {
+            BookmarksContent()
         }
         return binding.root
     }
-
+    @Composable
+    private fun BookmarksContent() {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(6.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // items(mock_articles) { article ->
+            //     ArticleListCard(
+            //         article = article,
+            //         onClick = { onArticleClick(article) }
+            //     )
+            // }
+        }
+    }
     private fun onArticleClick(article: Int) {
 
     }

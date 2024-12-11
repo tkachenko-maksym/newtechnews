@@ -8,9 +8,9 @@ import retrofit2.http.Query
 interface NewsApiService {
     @GET("top-headlines")
     suspend fun getTopHeadlines(
-        @Query("category") category: String = "technology",
+        @Query("sources") category: String = "techcrunch,techradar,crypto-coins-news,engadget,hacker-news,new-scientist,recode,the-next-web",
         @Query("q") q: String?,
-        @Query("pageSize") pageSize: Int=5,
+        @Query("pageSize") pageSize: Int = 5,
         @Query("page") page: Int,
         @Query("apiKey") apiKey: String = BuildConfig.API_KEY
     ): NewsResponse

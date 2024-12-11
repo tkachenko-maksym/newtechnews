@@ -14,9 +14,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newtechnews.R
-import com.example.newtechnews.data.mock_articles
+//import com.example.newtechnews.data.mock_articles
 import com.example.newtechnews.databinding.FragmentNewsBinding
 import com.example.newtechnews.ui.adapters.NewsAdapter
+import com.example.newtechnews.utils.NetworkUtils
 import com.google.android.material.snackbar.Snackbar
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -45,7 +46,7 @@ class NewsFragment : Fragment() {
 //        setupSearchBar()
         setupSwipeRefresh()
         setupObservers()
-
+        viewModel.cleanDatabase()
         // Initial news fetch
         viewModel.fetchNews()
     }
@@ -56,7 +57,7 @@ class NewsFragment : Fragment() {
                 onItemClick = { article ->
 
                     findNavController().navigate(
-                        NewsFragmentDirections.actionNewsFragmentToNewsDetailsFragment()
+                        NewsFragmentDirections.actionNewsFragmentToNewsDetailsFragment(article.url)
                     )
                 },
                 onBookmarkClick = { article ->
@@ -67,7 +68,7 @@ class NewsFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            adapter=newsAdapter
+            adapter = newsAdapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -107,6 +108,7 @@ class NewsFragment : Fragment() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.fetchNews()
         }
+
     }
 
     private fun setupObservers() {
