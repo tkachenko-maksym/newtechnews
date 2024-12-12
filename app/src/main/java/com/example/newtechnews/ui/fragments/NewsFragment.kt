@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -12,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newtechnews.R
 import com.example.newtechnews.databinding.FragmentNewsBinding
 import com.example.newtechnews.ui.adapters.NewsAdapter
 import com.example.newtechnews.ui.viewmodel.NewsViewModel
@@ -20,10 +23,6 @@ import com.google.android.material.snackbar.Snackbar
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NewsFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = NewsFragment()
-    }
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
@@ -35,7 +34,28 @@ class NewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNewsBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
+
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_app_bar, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView =
+            searchItem?.actionView as androidx.appcompat.widget.SearchView // Correct cast
+
+        searchView.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(query: String): Boolean {
+                viewModel.onSearchQueryChanged(query)
+                return true
+            }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,15 +1,17 @@
 package com.example.newtechnews.ui.viewmodel
 
 import android.app.Application
-import android.net.http.HttpException
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.example.newtechnews.data.model.Article
 import com.example.newtechnews.data.repository.NewsRepository
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 
@@ -17,6 +19,10 @@ class NewsViewModel(
     application: Application,
 ) : AndroidViewModel(application) {
     private val repository: NewsRepository = NewsRepository(application)
+
+    private val _searchQuery = MutableLiveData("")
+    val searchQuery: LiveData<String> = _searchQuery
+
     private val _articles = MutableLiveData<List<Article>>()
     val articles: LiveData<List<Article>> = _articles
 
@@ -32,16 +38,35 @@ class NewsViewModel(
     private var currentJob: Job? = null
     private var page: Int = 1
 
+    init {
+        observeSearchQuery()
+    }
 
-    fun fetchNews(query: String? = null) {
-        fetchData(query)
+    private fun observeSearchQuery() {
+        viewModelScope.launch {
+            _searchQuery.asFlow()
+                .debounce(500L)
+                .distinctUntilChanged()
+                .collect {
+                    fetchNews()
+                }
+        }
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun fetchNews() {
+        page = 1
+        cleanDatabase()
+        fetchData(_searchQuery.value)
     }
 
     fun fetchNextPage(
-        query: String? = null,
     ) {
         page += 1
-        fetchData(query)
+        fetchData(_searchQuery.value)
     }
 
     fun cleanDatabase() {
@@ -50,7 +75,6 @@ class NewsViewModel(
             _articles.value = emptyList()
         }
     }
-
 
     private fun fetchData(query: String?) {
         currentJob?.cancel()
