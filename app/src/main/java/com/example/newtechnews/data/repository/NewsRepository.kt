@@ -85,7 +85,7 @@ class NewsRepository(
 }
 
 // Extensions for conversion between Article and Bookmark
-private fun Article.toBookmark() = Bookmark(
+ fun Article.toBookmark() = Bookmark(
     url = this.url,
     articleSource = this.articleSource,
     author = this.author,
@@ -96,7 +96,7 @@ private fun Article.toBookmark() = Bookmark(
     content = this.content
 )
 
-private fun Bookmark.toArticle() = Article(
+ fun Bookmark.toArticle() = Article(
     url = this.url,
     articleSource = this.articleSource,
     author = this.author,
