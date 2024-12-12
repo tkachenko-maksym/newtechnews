@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -19,7 +20,6 @@ import com.example.newtechnews.databinding.FragmentNewsBinding
 import com.example.newtechnews.ui.adapters.NewsAdapter
 import com.example.newtechnews.ui.viewmodel.NewsViewModel
 import com.example.newtechnews.utils.NetworkUtils
-import com.google.android.material.snackbar.Snackbar
 import java.util.concurrent.atomic.AtomicBoolean
 
 class NewsFragment : Fragment() {
@@ -65,24 +65,36 @@ class NewsFragment : Fragment() {
         setupObservers()
         if (NetworkUtils.isNetworkAvailable(requireContext())) {
             viewModel.cleanDatabase()
+            viewModel.fetchNews()
+        }
+        if (!NetworkUtils.isNetworkAvailable(requireContext())) {
+            Toast.makeText(
+                requireContext(),
+                "No internet connection! Cached news is displayed.",
+                Toast.LENGTH_LONG
+            ).show()
         }
         viewModel.loadBookmarkedArticles()
-        viewModel.fetchNews()
         Log.d("onViewCreated", "onViewCreated")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!NetworkUtils.isNetworkAvailable(requireContext())) {
+            viewModel.loadCachedArticles()
+        }
     }
 
     private fun setupRecyclerView() {
         binding.newsRecyclerView.apply {
             newsAdapter = NewsAdapter(
                 onItemClick = { article ->
-
                     findNavController().navigate(
                         NewsFragmentDirections.actionNewsFragmentToNewsDetailsFragment(article)
                     )
                 },
                 onBookmarkClick = { article ->
                     viewModel.toggleBookmark(article)
-
                 },
                 bookmarkedArticles = viewModel.bookmarkedArticles
             )
@@ -142,11 +154,6 @@ class NewsFragment : Fragment() {
         viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
                 binding.newsRecyclerView.isVisible = false
-                Snackbar.make(
-                    binding.root,
-                    errorMessage,
-                    Snackbar.LENGTH_LONG
-                ).show()
             }
         }
     }

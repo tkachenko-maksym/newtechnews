@@ -39,6 +39,9 @@ class NewsViewModel(
     private var page: Int = 1
 
     init {
+        viewModelScope.launch {
+            loadCachedArticles()
+        }
         observeSearchQuery()
     }
 
@@ -48,7 +51,9 @@ class NewsViewModel(
                 .debounce(500L)
                 .distinctUntilChanged()
                 .collect {
-                    fetchNews()
+                    if (!_searchQuery.value.isNullOrEmpty()) {
+                        fetchNews()
+                    }
                 }
         }
     }
@@ -75,7 +80,6 @@ class NewsViewModel(
             _articles.value = emptyList()
         }
     }
-
     private fun fetchData(query: String?) {
         currentJob?.cancel()
         currentJob = viewModelScope.launch {
@@ -109,9 +113,11 @@ class NewsViewModel(
         }
     }
 
-    private suspend fun loadCachedArticles() {
-        repository.getAllArticles().let { cached ->
-            _articles.value = cached
+    fun loadCachedArticles() {
+        viewModelScope.launch {
+            repository.getAllArticles().let { cached ->
+                _articles.value = cached
+            }
         }
     }
 
