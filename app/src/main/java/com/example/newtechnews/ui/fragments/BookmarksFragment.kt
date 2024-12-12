@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,10 +22,6 @@ import com.example.newtechnews.ui.viewmodel.BookmarksViewModel
 
 class BookmarksFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = BookmarksFragment()
-    }
-
     private var _binding: FragmentBookmarksBinding? = null
     private val binding get() = _binding!!
     private val viewModel: BookmarksViewModel by viewModels()
@@ -34,13 +31,24 @@ class BookmarksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentBookmarksBinding.inflate(inflater, container, false)
-        viewModel.loadBookmarkedArticles()
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadBookmarkedArticles()
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.bookmarkedArticles.observe(viewLifecycleOwner) { bookmarkedArticles ->
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.onSearchQueryChanged(newText ?: "")
+                return true
+            }
+        })
+        viewModel.filteredArticles.observe(viewLifecycleOwner) { bookmarkedArticles ->
             binding.composeView.setContent {
                 BookmarksContent(articles = bookmarkedArticles)
             }
@@ -67,14 +75,5 @@ class BookmarksFragment : Fragment() {
             }
         }
 
-        fun onArticleClick(article: Int) {
-
-        }
     }
 }
-//onItemClick = { article ->
-//
-//    findNavController().navigate(
-//        NewsFragmentDirections.actionNewsFragmentToNewsDetailsFragment(article)
-//    )
-//},
